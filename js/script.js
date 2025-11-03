@@ -2,73 +2,6 @@
 const API_BASE = 'http://localhost:3001/api';
 
 document.addEventListener('DOMContentLoaded', function() {
-    // ... (keep all your existing code until the contact form section)
-
-    // Updated Contact Form Submission
-    const contactForm = document.querySelector('.contact-form');
-    const formMessage = document.getElementById('form-message');
-
-    if (contactForm) {
-        contactForm.addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            const submitButton = this.querySelector('.form-submit');
-            const originalText = submitButton.textContent;
-            
-            // Show loading state
-            submitButton.textContent = 'Sending...';
-            submitButton.classList.add('loading');
-            
-            const formData = {
-                name: this.querySelector('#name').value,
-                email: this.querySelector('#email').value,
-                message: this.querySelector('#message').value
-            };
-
-            try {
-                const response = await fetch(`${API_BASE}/contact`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(formData)
-                });
-
-                const result = await response.json();
-                
-                if (result.success) {
-                    showFormMessage('Thank you for your message! I will get back to you soon.', 'success');
-                    this.reset();
-                } else {
-                    showFormMessage('There was an error sending your message. Please try again.', 'error');
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                showFormMessage('There was an error sending your message. Please try again.', 'error');
-            } finally {
-                // Reset button
-                submitButton.textContent = originalText;
-                submitButton.classList.remove('loading');
-            }
-        });
-    }
-
-    function showFormMessage(message, type) {
-        if (formMessage) {
-            formMessage.textContent = message;
-            formMessage.className = `form-message ${type}`;
-            formMessage.style.display = 'block';
-            
-            // Hide message after 5 seconds
-            setTimeout(() => {
-                formMessage.style.display = 'none';
-            }, 5000);
-        }
-    }
-
-    // ... (rest of your existing JavaScript)
-});
-document.addEventListener('DOMContentLoaded', function() {
     // Loader animation
     const loader = document.querySelector('.loader');
     const censoredText = document.querySelector('.censored-text');
@@ -310,27 +243,66 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // Form submission
+    // Updated Contact Form Submission
     const contactForm = document.querySelector('.contact-form');
-    
+    const formMessage = document.getElementById('form-message');
+
     if (contactForm) {
-        contactForm.addEventListener('submit', function(e) {
+        contactForm.addEventListener('submit', async function(e) {
             e.preventDefault();
             
-            // Get form values
-            const name = this.querySelector('#name').value;
-            const email = this.querySelector('#email').value;
-            const message = this.querySelector('#message').value;
+            const submitButton = this.querySelector('.form-submit');
+            const originalText = submitButton.textContent;
             
-            // Here you would typically send the form data to a server
-            console.log('Form submitted:', { name, email, message });
+            // Show loading state
+            submitButton.textContent = 'Sending...';
+            submitButton.classList.add('loading');
             
-            // Show success message
-            alert('Thank you for your message! I will get back to you soon.');
-            
-            // Reset form
-            this.reset();
+            const formData = {
+                name: this.querySelector('#name').value,
+                email: this.querySelector('#email').value,
+                message: this.querySelector('#message').value
+            };
+
+            try {
+                const response = await fetch(`${API_BASE}/contact`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                const result = await response.json();
+                
+                if (result.success) {
+                    showFormMessage('Thank you for your message! I will get back to you soon.', 'success');
+                    this.reset();
+                } else {
+                    showFormMessage('There was an error sending your message. Please try again.', 'error');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showFormMessage('There was an error sending your message. Please try again.', 'error');
+            } finally {
+                // Reset button
+                submitButton.textContent = originalText;
+                submitButton.classList.remove('loading');
+            }
         });
+    }
+
+    function showFormMessage(message, type) {
+        if (formMessage) {
+            formMessage.textContent = message;
+            formMessage.className = `form-message ${type}`;
+            formMessage.style.display = 'block';
+            
+            // Hide message after 5 seconds
+            setTimeout(() => {
+                formMessage.style.display = 'none';
+            }, 5000);
+        }
     }
     
     // Add hover effects to interactive elements
